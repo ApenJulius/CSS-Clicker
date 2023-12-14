@@ -53,7 +53,7 @@ let shopLevelDollarText = document.getElementById("shopLevelDollarText");
 notFinished();
 function notFinished() {
     //css upgrades
-    upgCssObjects = {
+    upgCssObjects = { // These can (and maybe should) be moved to a separate file
         "font-size": {
             name: "font-size",
             title: "Font-size",
