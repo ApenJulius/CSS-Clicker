@@ -50,7 +50,11 @@ let shopLevelCssDiv = document.getElementById("shopLevelCssDiv");
 let shopLevelDollarDiv = document.getElementById("shopLevelDollarDiv");
 let shopLevelDollarText = document.getElementById("shopLevelDollarText");
 
-
+const upgrades = fetch("./upgrades.json").then((response) => 
+    response.json())
+    .then((data) => {
+        console.log(data)
+    });
 
 
 //unitTestCss();
