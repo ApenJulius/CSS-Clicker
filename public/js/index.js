@@ -50,13 +50,7 @@ let shopLevelCssDiv = document.getElementById("shopLevelCssDiv");
 let shopLevelDollarDiv = document.getElementById("shopLevelDollarDiv");
 let shopLevelDollarText = document.getElementById("shopLevelDollarText");
 
-const upgrades = fetch("./upgrades.json").then((response) => 
-    response.json())
-    .then((data) => {
-        console.log(data)
-    });
-
-
+const l = fetch("../upgrades.json").then((response) => response.json()).then((data) => {console.log(data)});
 //unitTestCss();
 
 function unitTestCss() {
@@ -103,9 +97,6 @@ function buyAllCssUpgrades() {
     }
 }
 
-levelCssUpgrades();
-setupLevelCssUpgrades();
-
 function setupLevelCssUpgrades() {
     shopLevelCssDiv.innerHTML = "";
 
@@ -120,8 +111,6 @@ function setupLevelCssUpgrades() {
         }
     }
 }
-
-setupCssUpgrades();
 
 function setupCssUpgrades() {
     shopCssDiv.innerHTML = "";
@@ -421,7 +410,6 @@ function selgeSide2() {
 
         dollarUnlocked = true;
 
-        levelCssUpgrades();
         setupCssUpgrades();
         setupLevelCssUpgrades();
         linesPerLineWritten();
@@ -451,8 +439,6 @@ function reincarnation2() {
         window.location.replace("reinkarnasjon.html");
     }
 }
-
-onOpen();
 
 function onOpen() {
     if (localStorage.getItem("chosenUpg") != null) {
@@ -647,4 +633,7 @@ const lengthValueProperties = [
 
 const numberPropertyTypes = [keywordValueProperties, lengthValueProperties, numericValueProperties];
 
+setupLevelCssUpgrades();
+setupCssUpgrades();
+onOpen();
 newCssText();
