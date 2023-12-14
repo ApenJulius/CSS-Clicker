@@ -39,7 +39,6 @@ let timer = 0;
 let goldenLineInterval;
 let autoInterval;
 let totalAutoMultiplier = 1;
-let upgCssObjects = {};
 let upgDollarObjects = {};
 let html;
 let shopCssDiv = document.getElementById("shopCssDiv");
@@ -50,12 +49,16 @@ let shopLevelCssDiv = document.getElementById("shopLevelCssDiv");
 let shopLevelDollarDiv = document.getElementById("shopLevelDollarDiv");
 let shopLevelDollarText = document.getElementById("shopLevelDollarText");
 
-const l = fetch("../upgrades.json").then((response) => response.json()).then((data) => {console.log(data)});
+let upgrades
+async function fetchUpgrades() {
+    const response = await fetch("../upgrades.json")
+    upgrades = await response.json()
+}
 //unitTestCss();
 
 function unitTestCss() {
     for (let i = 0; i < 10; i++) {
-        upgCssObjects["testUpg" + i] = {
+        upgrades.cssUpgrades["testUpg" + i] = {
             name: "testUpg" + i,
             title: "TestUpg" + i,
             toolTip: "Dette er en tooltip.",
@@ -88,10 +91,10 @@ let upgLevelCssObjects = {};
 //buyAllCssUpgrades();
 
 function buyAllCssUpgrades() {
-    addNextShopItem2(upgCssObjects, shopCssDiv);
+    addNextShopItem2(upgrades.cssUpgrades, shopCssDiv);
     for (let i = 0; i < 6; i++) {
         console.log(i);
-        let currentUpg = Object.entries(upgCssObjects)[i][1];
+        let currentUpg = Object.entries(upgrades.cssUpgrades)[i][1];
         
         buyCssUpg(currentUpg);
     }
@@ -116,11 +119,11 @@ function setupCssUpgrades() {
     shopCssDiv.innerHTML = "";
 
     for (let i = 0; i < 3; i++) {
-        let currentUpg = Object.entries(upgCssObjects)[i][1];
+        let currentUpg = Object.entries(upgrades.cssUpgrades)[i][1];
 
         addCssUpgrade(currentUpg);
         if (currentUpg.isIncremental == true) {
-            let nextUpg = Object.entries(upgCssObjects)[i + 1][1];
+            let nextUpg = Object.entries(upgrades.cssUpgrades)[i + 1][1];
             addCssUpgrade(nextUpg);            
         }
     }
@@ -233,7 +236,7 @@ function buyCssUpg(upg) {
         document.getElementById(`${upg.name}Shop`).parentElement.remove();
 
         addUpgBought2(upg, cssUpgradesBoughtBox);
-        addNextShopItem2(upgCssObjects, shopCssDiv);
+        addNextShopItem2(upgrades.cssUpgrades, shopCssDiv);
         linesPerLineWritten();
     }
 }
@@ -442,7 +445,7 @@ function reincarnation2() {
 
 function onOpen() {
     if (localStorage.getItem("chosenUpg") != null) {
-        buyCssUpg(upgCssObjects[localStorage.getItem("chosenUpg")]);
+        buyCssUpg(upgrades.cssUpgrades[localStorage.getItem("chosenUpg")]);
     }
 }
 
@@ -633,7 +636,9 @@ const lengthValueProperties = [
 
 const numberPropertyTypes = [keywordValueProperties, lengthValueProperties, numericValueProperties];
 
-setupLevelCssUpgrades();
-setupCssUpgrades();
-onOpen();
-newCssText();
+fetchUpgrades().then(() => {
+    setupLevelCssUpgrades();
+    setupCssUpgrades();
+    onOpen();
+    newCssText();
+})
