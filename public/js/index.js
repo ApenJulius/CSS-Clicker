@@ -39,7 +39,6 @@ let timer = 0;
 let goldenLineInterval;
 let autoInterval;
 let totalAutoMultiplier = 1;
-let upgDollarObjects = {};
 let html;
 let shopCssDiv = document.getElementById("shopCssDiv");
 let dollarUpgradesBoughtBox = document.getElementById("dollarUpgradesBoughtBox");
@@ -58,7 +57,7 @@ async function fetchUpgrades() {
 
 function unitTestCss() {
     for (let i = 0; i < 10; i++) {
-        upgrades.cssUpgrades["testUpg" + i] = {
+        cssUpgrades["testUpg" + i] = {
             name: "testUpg" + i,
             title: "TestUpg" + i,
             toolTip: "Dette er en tooltip.",
@@ -134,7 +133,7 @@ function setupDollarUpgrades() {
 
     let incremantals = 0;
     for (let i = 0; i < 3; i++) {
-        let currentUpg = Object.entries(upgDollarObjects)[i][1];
+        let currentUpg = Object.entries(upgrades.upgDollarObjects)[i][1];
 
         addDollarUpgrade(currentUpg);
         if (currentUpg.isIncremental == true) {
@@ -142,7 +141,7 @@ function setupDollarUpgrades() {
         }
     }
     for (let i = 0; i < incremantals; i++) {
-        let nextUpg = Object.entries(upgDollarObjects)[3 + i][1];
+        let nextUpg = Object.entries(upgrades.upgDollarObjects)[3 + i][1];
         addDollarUpgrade(nextUpg);
     }
 }
@@ -224,9 +223,9 @@ function buyCssUpg(upg) {
         allCssUpgradesBought.push(upg.name);
 
         let isAllCSSBought = localStorage.getItem("allCssUpgradesBought") == null 
-        let hasCssUpgrade = localStorage.getItem("allCssUpgradesBought").includes(upg.name) == false;
+        let hasCssUpgrade = localStorage.getItem("allCssUpgradesBought").includes(upg.name);
 
-        if (localStorage.getItem("allCssUpgradesBought") == null || localStorage.getItem("allCssUpgradesBought").includes(upg.name) == false) {
+        if (isAllCSSBought || !hasCssUpgrade) {
             localStorage.setItem("allCssUpgradesBought", allCssUpgradesBought);
         }
         if (upg.isIncremental == true) {
@@ -271,7 +270,7 @@ function buyDollarUpg(upg) {
         document.getElementById(`${upg.name}Shop`).parentElement.remove();
 
         addUpgBought2(upg, dollarUpgradesBoughtBox);
-        addNextShopItem2(upgDollarObjects, shopDollarDiv);
+        addNextShopItem2(upgrades.upgDollarObjects, shopDollarDiv);
         linesPerLineWritten();
     }
 }
@@ -281,7 +280,7 @@ function addNextShopItem2(upgObjects, shopDiv) {
 
     boughtDollarIncrementals.forEach((element) => {
         if (allDollaridoosUpgradesBought[allDollaridoosUpgradesBought.length - 1] == element && shopDiv == shopDollarDiv) {
-            let upg = upgDollarObjects[element.replace(/\d+/g, '')];
+            let upg = upgrades.upgrades.upgDollarObjects[element.replace(/\d+/g, '')];
             upg.price *= upg.upgradeIncrement;
             let newname = upg.name.replace(/\d+/g, '') + (parseInt(upg.name.match(/\d+/g)) + 1);
             upg.name =  newname;
